@@ -1,0 +1,88 @@
+<!--
+  ~ Copyright (C) 2015, Zentri, Inc. All Rights Reserved.
+  ~
+  ~ The Zentri BLE Android Libraries and Zentri BLE example applications are provided free of charge
+  ~ by Zentri. The combined source code, and all derivatives, are licensed by Zentri SOLELY for use
+  ~ with devices manufactured by Zentri, or devices approved by Zentri.
+  ~
+  ~ Use of this software on any other devices or hardware platforms is strictly prohibited.
+  ~ THIS SOFTWARE IS PROVIDED BY THE AUTHOR AS IS AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING,
+  ~ BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+  ~ PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
+  ~ INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+  ~ PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+  ~ INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+  ~ LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+  ~ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  -->
+
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="fill_parent"
+             android:layout_height="fill_parent"
+             android:background="@color/white"
+             tools:context="com.zentri.zentri_ble_command_demo.SplashScreen">
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scaleType="fitXY"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="150dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:id="@+id/logo"
+            android:layout_gravity="center"
+            android:src="@drawable/zentri_logo"
+            android:layout_centerHorizontal="true"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/app_name"
+            android:layout_below="@id/logo"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="40dp"
+            android:textSize="22sp"
+            android:textColor="@color/black"
+            android:text="@string/app_name"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/version"
+            android:layout_below="@id/app_name"
+            android:layout_centerHorizontal="true"
+            android:textSize="20sp"
+            android:textColor="@color/black"
+            android:text="@string/version_heading"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/docs_link"
+            android:textSize="20sp"
+            android:textColor="@color/zentri_orange"
+            android:text="@string/website_docs_display"
+            android:layout_above="@+id/company_link"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="85dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/company_link"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_margin="20dp"
+            android:textSize="20sp"
+            android:textColor="@color/zentri_orange"
+            android:text="@string/website_company"/>
+    </RelativeLayout>
+
+</FrameLayout>

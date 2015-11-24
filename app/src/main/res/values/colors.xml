@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (C) 2015, Zentri, Inc. All Rights Reserved.
+  ~
+  ~ The Zentri BLE Android Libraries and Zentri BLE example applications are provided free of charge
+  ~ by Zentri. The combined source code, and all derivatives, are licensed by Zentri SOLELY for use
+  ~ with devices manufactured by Zentri, or devices approved by Zentri.
+  ~
+  ~ Use of this software on any other devices or hardware platforms is strictly prohibited.
+  ~ THIS SOFTWARE IS PROVIDED BY THE AUTHOR AS IS AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING,
+  ~ BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+  ~ PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
+  ~ INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+  ~ PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+  ~ INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+  ~ LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+  ~ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  -->
+
+<resources>
+    <color name="grey_light">#EAEBEB</color>
+
+    <color name="zentri_orange">#F05f22</color>
+    <color name="zentri_red">#D92A22</color>
+
+    <color name="transparent">#00000000</color>
+
+    <color name="green">#16AF0F</color>
+    <color name="material_dark_window_background">#303030</color>
+    <color name="grey_dark">#212121</color>
+    <color name="red_light">#D50308</color>
+    <color name="grey">#AAAAAA</color>
+    <color name="black">#000000</color>
+    <color name="white">#FFFFFF</color>
+    <color name="link_blue">#33b5e5</color>
+
+    <color name="black_overlay">#66000000</color>
+</resources>
