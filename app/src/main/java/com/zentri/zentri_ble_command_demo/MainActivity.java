@@ -566,7 +566,7 @@ public class MainActivity extends AppCompatActivity
         else if (!requestPermissions())
         {
         }
-        else if (!Util.isLocationEnabled(this))
+        else if (!Util.isPreMarshmallow() && !Util.isLocationEnabled(this))
         {
             showLocationEnableDialog();
         }
