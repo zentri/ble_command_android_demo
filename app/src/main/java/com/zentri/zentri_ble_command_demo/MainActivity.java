@@ -190,11 +190,6 @@ public class MainActivity extends AppCompatActivity
         bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
 
         mLocalBroadcastManager.registerReceiver(mBroadcastReceiver, mReceiverIntentFilter);
-
-        if (!Util.isPreMarshmallow() && !Util.isLocationEnabled(this))
-        {
-            showLocationEnableDialog();
-        }
     }
 
     @Override
@@ -245,7 +240,10 @@ public class MainActivity extends AppCompatActivity
             mService.initTruconnectManager();//try again
             if (mZentriOSBLEManager.isInitialised())
             {
-                startScan();
+                if (requirementsMet())
+                {
+                    startScan();
+                }
             }
             else
             {
@@ -265,12 +263,7 @@ public class MainActivity extends AppCompatActivity
                 if (grantResults.length > 0 &&
                         grantResults[0] == PackageManager.PERMISSION_GRANTED)
                 {
-                    //check location services are enabled
-                    if (!Util.isLocationEnabled(this))
-                    {
-                        showLocationEnableDialog();
-                    }
-                    else
+                    if (requirementsMet())
                     {
                         startScan();
                     }
@@ -325,11 +318,9 @@ public class MainActivity extends AppCompatActivity
                 mBound = true;
 
                 mZentriOSBLEManager = mService.getManager();
-                if(!mZentriOSBLEManager.isInitialised())
-                {
-                    startBLEEnableIntent();
-                }
-                else if (requestPermissions())
+
+                //if requirements not met, action will already be taken
+                if (requirementsMet())
                 {
                     startScan();
                 }
@@ -558,6 +549,33 @@ public class MainActivity extends AppCompatActivity
         }
 
         return result;
+    }
+
+    /**
+     * Checks if requirements for this app to run are met.
+     * @return true if requirements to run are met
+     */
+    private boolean requirementsMet()
+    {
+        boolean reqMet = false;
+
+        if (!mZentriOSBLEManager.isInitialised())
+        {
+            startBLEEnableIntent();
+        }
+        else if (!requestPermissions())
+        {
+        }
+        else if (!Util.isLocationEnabled(this))
+        {
+            showLocationEnableDialog();
+        }
+        else
+        {
+            reqMet = true;
+        }
+
+        return reqMet;
     }
 
     private void showPermissionsRationaleDialog()
