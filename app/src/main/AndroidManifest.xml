@@ -49,7 +49,7 @@
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name_short"
-            android:icon="@color/transparent">
+            android:icon="@drawable/transparent">
         </activity>
 
         <service
@@ -61,7 +61,7 @@
         <activity
             android:name=".DeviceInfoActivity"
             android:label="@string/title_activity_device_info"
-            android:icon="@color/transparent"
+            android:icon="@drawable/transparent"
             android:parentActivityName=".MainActivity"
             android:screenOrientation="portrait">
             <meta-data
