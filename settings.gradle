@@ -16,4 +16,4 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-include ':app', ':zentri_ble-1.1.0.0', ':zentri_ble_command-1.1.0.0'
+include ':app', ':zentri_ble', ':zentri_ble_command'

@@ -145,9 +145,9 @@ public class ZentriOSBLEService extends Service
         mCallbacks = new BLECallbacks()
         {
             @Override
-            public void onScanResult(String deviceName)
+            public void onScanResult(String deviceName, String address)
             {
-                Log.d(TAG, "onScanResult");
+                Log.d(TAG, "onScanResult: " + deviceName + " " + address);
 
                 Intent intent = new Intent(ACTION_SCAN_RESULT);
                 intent.putExtra(EXTRA_DATA, deviceName);
