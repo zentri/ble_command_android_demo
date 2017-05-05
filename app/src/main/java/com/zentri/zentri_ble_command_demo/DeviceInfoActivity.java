@@ -46,7 +46,6 @@ import android.widget.Toast;
 import android.widget.ToggleButton;
 
 
-import com.zentri.zentri_ble_command.Command;
 import com.zentri.zentri_ble_command.CommandMode;
 import com.zentri.zentri_ble_command.ErrorCode;
 import com.zentri.zentri_ble_command.GPIODirection;
@@ -99,6 +98,8 @@ public class DeviceInfoActivity extends AppCompatActivity
     private Handler mHandler;
     private Runnable mDisconnectTimeoutTask;
 
+    private String mDeviceName;
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -114,6 +115,9 @@ public class DeviceInfoActivity extends AppCompatActivity
         {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
+
+        Intent intent = getIntent();
+        mDeviceName = intent.getStringExtra(MainActivity.INTENT_EXTRA_DEVICE_NAME);
 
         mADCTextView = (TextView)findViewById(R.id.adc_value);
         mGPIOTextView = (TextView)findViewById(R.id.gpio_value);
@@ -161,7 +165,7 @@ public class DeviceInfoActivity extends AppCompatActivity
                 {
                     mCurrentMode = ZentriOSBLEManager.MODE_COMMAND_REMOTE;
                 }
-                mZentriOSBLEManager.setMode(mCurrentMode);
+                mZentriOSBLEManager.setMode(mDeviceName, mCurrentMode);
             }
         });
 
@@ -175,7 +179,7 @@ public class DeviceInfoActivity extends AppCompatActivity
                 String data = mTextToSendBox.getText().toString();
                 if (data != null && !data.isEmpty())
                 {
-                    mZentriOSBLEManager.writeData(data);
+                    mZentriOSBLEManager.writeData(mDeviceName, data);
                 }
 
                 mTextToSendBox.setText("");//clear input after send
@@ -249,7 +253,7 @@ public class DeviceInfoActivity extends AppCompatActivity
         super.onStop();
 
         //quickly disconnect to make sure we are definitely disconnected
-        mZentriOSBLEManager.disconnect(!ZentriOSBLEService.DISABLE_TX_NOTIFY);
+        mZentriOSBLEManager.disconnect(mDeviceName, !ZentriOSBLEService.DISABLE_TX_NOTIFY);
 
         mLocalBroadcastManager.unregisterReceiver(mBroadcastReceiver);
 
@@ -271,8 +275,8 @@ public class DeviceInfoActivity extends AppCompatActivity
                 mBound = true;
 
                 mZentriOSBLEManager = mService.getManager();
-                mZentriOSBLEManager.setMode(ZentriOSBLEManager.MODE_COMMAND_REMOTE);
-                mZentriOSBLEManager.setSystemCommandMode(CommandMode.MACHINE);
+                mZentriOSBLEManager.setMode(mDeviceName, ZentriOSBLEManager.MODE_COMMAND_REMOTE);
+                mZentriOSBLEManager.setSystemCommandMode(mDeviceName, CommandMode.MACHINE);
                 initGPIOs();
                 updateValues();
             }
@@ -378,15 +382,15 @@ public class DeviceInfoActivity extends AppCompatActivity
 
     private void initGPIOs()
     {
-        mZentriOSBLEManager.GPIOFunctionSet(ADC_GPIO, GPIOFunction.NONE);
-        mZentriOSBLEManager.GPIOFunctionSet(TEST_GPIO, GPIOFunction.NONE);
-        mZentriOSBLEManager.GPIOFunctionSet(LED_GPIO, GPIOFunction.NONE);
+        mZentriOSBLEManager.GPIOFunctionSet(mDeviceName, ADC_GPIO, GPIOFunction.NONE);
+        mZentriOSBLEManager.GPIOFunctionSet(mDeviceName, TEST_GPIO, GPIOFunction.NONE);
+        mZentriOSBLEManager.GPIOFunctionSet(mDeviceName, LED_GPIO, GPIOFunction.NONE);
 
-        mZentriOSBLEManager.GPIOFunctionSet(TEST_GPIO, GPIOFunction.STDIO);
-        mZentriOSBLEManager.GPIOFunctionSet(LED_GPIO, GPIOFunction.STDIO);
+        mZentriOSBLEManager.GPIOFunctionSet(mDeviceName, TEST_GPIO, GPIOFunction.STDIO);
+        mZentriOSBLEManager.GPIOFunctionSet(mDeviceName, LED_GPIO, GPIOFunction.STDIO);
 
-        mZentriOSBLEManager.GPIODirectionSet(TEST_GPIO, GPIODirection.INPUT);
-        mZentriOSBLEManager.GPIODirectionSet(LED_GPIO, GPIODirection.OUTPUT_LOW);
+        mZentriOSBLEManager.GPIODirectionSet(mDeviceName, TEST_GPIO, GPIODirection.INPUT);
+        mZentriOSBLEManager.GPIODirectionSet(mDeviceName, LED_GPIO, GPIODirection.OUTPUT_LOW);
     }
 
     private void updateValues()
@@ -397,8 +401,8 @@ public class DeviceInfoActivity extends AppCompatActivity
             mGPIOUpdateInProgress = true;
 
             Log.d(TAG, "Updating values");
-            mADCUpdateID = mZentriOSBLEManager.adc(ADC_GPIO);
-            mGPIOUpdateID = mZentriOSBLEManager.GPIOGet(TEST_GPIO);
+            mADCUpdateID = mZentriOSBLEManager.adc(mDeviceName, ADC_GPIO);
+            mGPIOUpdateID = mZentriOSBLEManager.GPIOGet(mDeviceName, TEST_GPIO);
         }
         else
         {
@@ -408,7 +412,7 @@ public class DeviceInfoActivity extends AppCompatActivity
 
     private void handleCommandResponse(Intent intent)
     {
-        Command command = ZentriOSBLEService.getCommand(intent);
+        String command = ZentriOSBLEService.getCommand(intent);
         int code = ZentriOSBLEService.getResponseCode(intent);
         int id = ZentriOSBLEService.getCommandID(intent);
 
@@ -469,7 +473,7 @@ public class DeviceInfoActivity extends AppCompatActivity
     {
         mDisconnecting = true;
         showDisconnectDialog();
-        mZentriOSBLEManager.disconnect(ZentriOSBLEService.DISABLE_TX_NOTIFY);
+        mZentriOSBLEManager.disconnect(mDeviceName, ZentriOSBLEService.DISABLE_TX_NOTIFY);
         mHandler.postDelayed(mDisconnectTimeoutTask, DISCONNECT_TIMEOUT_MS);
     }
 
@@ -566,7 +570,7 @@ public class DeviceInfoActivity extends AppCompatActivity
 
     private void writeLedState()
     {
-        mZentriOSBLEManager.GPIOSet(LED_GPIO, mLedState);
+        mZentriOSBLEManager.GPIOSet(mDeviceName, LED_GPIO, mLedState);
     }
 
     private void openAboutDialog()

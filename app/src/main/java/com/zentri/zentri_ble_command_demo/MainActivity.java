@@ -65,11 +65,12 @@ public class MainActivity extends AppCompatActivity
     private static final String TAG = MainActivity.class.getSimpleName();
 
     private static final String LOC_PERM = Manifest.permission.ACCESS_COARSE_LOCATION;
+    static final String INTENT_EXTRA_DEVICE_NAME = "INTENT_EXTRA_DEVICE_NAME";
     private static final int BLE_ENABLE_REQ_CODE = 1;
     private static final int LOC_ENABLE_REQ_CODE = 2;
 
     private static final long SCAN_PERIOD = 30000;
-    private static final long CONNECT_TIMEOUT_MS = 10000;
+    private static final long CONNECT_TIMEOUT_MS = 30000;
 
     private static final String PATTERN_MAC_ADDRESS = "(\\p{XDigit}{2}:){5}\\p{XDigit}{2}";
 
@@ -145,9 +146,9 @@ public class MainActivity extends AppCompatActivity
                         showErrorDialog(R.string.con_timeout_message, false);
                         mConnecting = false;
                         mConnected = false;
-                        if(mZentriOSBLEManager != null && mZentriOSBLEManager.isConnected())
+                        if(mZentriOSBLEManager != null && mZentriOSBLEManager.isConnected(mCurrentDeviceName))
                         {
-                            mZentriOSBLEManager.disconnect(ZentriOSBLEService.DISABLE_TX_NOTIFY);
+                            mZentriOSBLEManager.disconnect(mCurrentDeviceName, ZentriOSBLEService.DISABLE_TX_NOTIFY);
                         }
                     }
                 });
@@ -612,7 +613,9 @@ public class MainActivity extends AppCompatActivity
 
     private void startDeviceInfoActivity()
     {
-        startActivity(new Intent(getApplicationContext(), DeviceInfoActivity.class));
+        Intent intent = new Intent(getApplicationContext(), DeviceInfoActivity.class);
+        intent.putExtra(INTENT_EXTRA_DEVICE_NAME, mCurrentDeviceName);
+        startActivity(intent);
     }
 
     private void startProgressBar()

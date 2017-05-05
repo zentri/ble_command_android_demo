@@ -21,15 +21,17 @@ package com.zentri.zentri_ble_command_demo;
 import android.app.Service;
 import android.content.Intent;
 import android.os.Binder;
+import android.os.Handler;
 import android.os.IBinder;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import com.zentri.zentri_ble_command.BLECallbacks;
-import com.zentri.zentri_ble_command.Command;
 import com.zentri.zentri_ble_command.ErrorCode;
 import com.zentri.zentri_ble_command.ZentriOSBLEManager;
 import com.zentri.zentri_ble_command.Result;
+
+import java.util.UUID;
 
 public class ZentriOSBLEService extends Service
 {
@@ -125,7 +127,7 @@ public class ZentriOSBLEService extends Service
         if (mZentriOSBLEManager != null)
         {
             mZentriOSBLEManager.stopScan();
-            mZentriOSBLEManager.disconnect(!DISABLE_TX_NOTIFY);//ensure all connections are terminated
+//            mZentriOSBLEManager.disconnect(!DISABLE_TX_NOTIFY);//ensure all connections are terminated
             mZentriOSBLEManager.deinit();
         }
     }
@@ -171,7 +173,7 @@ public class ZentriOSBLEService extends Service
             }
 
             @Override
-            public void onDisconnected()
+            public void onDisconnected(String deviceName)
             {
                 Log.d(TAG, "onDisconnected");
 
@@ -180,7 +182,7 @@ public class ZentriOSBLEService extends Service
             }
 
             @Override
-            public void onModeWritten(int mode)
+            public void onModeWritten(String deviceName, int mode)
             {
                 Log.d(TAG, "onModeWritten");
 
@@ -190,7 +192,7 @@ public class ZentriOSBLEService extends Service
             }
 
             @Override
-            public void onModeRead(int mode)
+            public void onModeRead(String deviceName, int mode)
             {
                 Log.d(TAG, "onModeRead");
 
@@ -200,7 +202,7 @@ public class ZentriOSBLEService extends Service
             }
 
             @Override
-            public void onStringDataWritten(String data)
+            public void onStringDataWritten(String deviceName, String data)
             {
                 Log.d(TAG, "onStringDataWritten");
 
@@ -210,7 +212,7 @@ public class ZentriOSBLEService extends Service
             }
 
             @Override
-            public void onStringDataRead(String data)
+            public void onStringDataRead(String deviceName, String data)
             {
                 Log.d(TAG, "onStringDataRead");
 
@@ -220,7 +222,7 @@ public class ZentriOSBLEService extends Service
             }
 
             @Override
-            public void onBinaryDataWritten(byte[] data)
+            public void onBinaryDataWritten(String deviceName, byte[] data)
             {
                 Log.d(TAG, "onBinaryDataWritten");
 
@@ -230,7 +232,7 @@ public class ZentriOSBLEService extends Service
             }
 
             @Override
-            public void onBinaryDataRead(byte[] data)
+            public void onBinaryDataRead(String deviceName, byte[] data)
             {
                 Log.d(TAG, "onBinaryDataRead");
 
@@ -240,7 +242,7 @@ public class ZentriOSBLEService extends Service
             }
 
             @Override
-            public void onCommandSent(int id, Command command)
+            public void onCommandSent(String deviceName, int id, String command)
             {
                 Log.d(TAG, "onCommandSent");
 
@@ -250,7 +252,7 @@ public class ZentriOSBLEService extends Service
             }
 
             @Override
-            public void onCommandResult(int id, Command command, Result result)
+            public void onCommandResult(String deviceName, int id, String command, Result result)
             {
                 Log.d(TAG, "onCommandResult");
 
@@ -268,13 +270,25 @@ public class ZentriOSBLEService extends Service
             }
 
             @Override
-            public void onError(ErrorCode error)
+            public void onError(String deviceName, ErrorCode error)
             {
                 Intent intent = new Intent(ACTION_ERROR);
                 intent.putExtra(EXTRA_ERROR, error);
                 mBroadcastManager.sendBroadcast(intent);
 
                 Log.d(TAG, "onError - " + error);
+
+            }
+
+            @Override
+            public void onCharacteristicRead(String deviceName, UUID serviceId, UUID charId, byte[] data)
+            {
+
+            }
+
+            @Override
+            public void onCharacteristicWritten(String deviceName, UUID serviceId, UUID charId, byte[] data)
+            {
 
             }
         };
@@ -290,9 +304,9 @@ public class ZentriOSBLEService extends Service
         return intent.getStringExtra(EXTRA_DATA);
     }
 
-    public static Command getCommand(Intent intent)
+    public static String getCommand(Intent intent)
     {
-        return (Command)intent.getSerializableExtra(EXTRA_COMMAND);
+        return intent.getStringExtra(EXTRA_COMMAND);
     }
 
     public static int getResponseCode(Intent intent)
